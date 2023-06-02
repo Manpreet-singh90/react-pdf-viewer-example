@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { RenderPage, RenderPageProps, Viewer, Worker } from "@react-pdf-viewer/core";
 import { themePlugin } from "@react-pdf-viewer/theme";
 import { DarkIcon, LightIcon } from "@react-pdf-viewer/theme";
-import { bookmarkPlugin } from '@react-pdf-viewer/bookmark';
+import { bookmarkPlugin } from "@react-pdf-viewer/bookmark";
 import {
   ToolbarProps,
   ToolbarSlot,
@@ -12,7 +12,7 @@ import { ReactElement, useState } from "react";
 
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-import '@react-pdf-viewer/bookmark/lib/styles/index.css';
+import "@react-pdf-viewer/bookmark/lib/styles/index.css";
 
 const ReactPdfViewer = () => {
   const themePluginInstance = themePlugin();
@@ -91,9 +91,8 @@ const ReactPdfViewer = () => {
     sidebarTabs: (defaultTabs: any) => [
       defaultTabs[0],
       defaultTabs[1],
-      defaultTabs[2]
+      defaultTabs[2],
     ],
-  
   });
 
   const onPageChange = (data: any) => {
@@ -104,6 +103,39 @@ const ReactPdfViewer = () => {
     setTotalDuration(totalNumPages);
   };
 
+  const renderPage: RenderPage = (props: RenderPageProps) => (
+    <>
+      {props.canvasLayer.children}
+      <div
+        style={{
+          alignItems: "center",
+          display: "flex",
+          height: "100%",
+          justifyContent: "center",
+          left: 0,
+          position: "absolute",
+          top: 0,
+          width: "100%",
+        }}
+      >
+        <div
+          style={{
+            color: "rgba(0, 0, 0, 0.2)",
+            fontSize: `90px`,
+            fontWeight: "bold",
+            textTransform: "uppercase",
+            // transform: "rotate(-45deg)",
+            userSelect: "none",
+          }}
+        >
+         Manpreet Singh
+        </div>
+      </div>
+      {props.annotationLayer.children}
+      {props.textLayer.children}
+    </>
+  );
+
   return (
     <div style={{ height: "100vh" }}>
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
@@ -111,7 +143,13 @@ const ReactPdfViewer = () => {
         <Viewer
           theme="DarkIcon"
           fileUrl="/src/assets/pdf/sample.pdf"
-          plugins={[defaultLayoutPluginInstance, themePluginInstance, bookmarkPluginInstance]}
+          plugins={[
+            defaultLayoutPluginInstance,
+            themePluginInstance,
+            bookmarkPluginInstance,
+          ]}
+          renderPage={renderPage}
+
           // onPageChange={onPageChange}
           // onDocumentLoad={onDocumentLoad}
           // initialPage={initialPage}
