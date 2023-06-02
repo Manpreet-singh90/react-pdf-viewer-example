@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { themePlugin } from "@react-pdf-viewer/theme";
+import { DarkIcon, LightIcon } from "@react-pdf-viewer/theme";
+import { bookmarkPlugin } from '@react-pdf-viewer/bookmark';
 import {
   ToolbarProps,
   ToolbarSlot,
@@ -9,8 +12,11 @@ import { ReactElement, useState } from "react";
 
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import '@react-pdf-viewer/bookmark/lib/styles/index.css';
 
 const ReactPdfViewer = () => {
+  const themePluginInstance = themePlugin();
+  const bookmarkPluginInstance = bookmarkPlugin();
   const [lastPlayed, setLastPlayed] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
   const [initialPage] = useState(1);
@@ -67,12 +73,12 @@ const ReactPdfViewer = () => {
             <div style={{ padding: "0px 2px", marginLeft: "auto" }}>
               <EnterFullScreen />
             </div>
-            {/* <div style={{padding: '0px 2px'}}>
-                            <Download />
-                        </div>
-                        <div style={{padding: '0px 2px'}}>
-                            <Print />
-                        </div> */}
+            <div style={{ padding: "0px 2px" }}>
+              <Download />
+            </div>
+            <div style={{ padding: "0px 2px" }}>
+              <Print />
+            </div>
           </div>
         );
       }}
@@ -81,7 +87,13 @@ const ReactPdfViewer = () => {
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin({
     renderToolbar,
-    sidebarTabs: (defaultTabs: any) => [],
+    /////// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Add Sidebar
+    sidebarTabs: (defaultTabs: any) => [
+      defaultTabs[0],
+      defaultTabs[1],
+      defaultTabs[2]
+    ],
+  
   });
 
   const onPageChange = (data: any) => {
@@ -97,8 +109,9 @@ const ReactPdfViewer = () => {
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
         {/* <Viewer fileUrl={fileUrl} plugins={[defaultLayoutPluginInstance]} initialPage={} /> */}
         <Viewer
+          theme="DarkIcon"
           fileUrl="/src/assets/pdf/sample.pdf"
-          plugins={[defaultLayoutPluginInstance]}
+          plugins={[defaultLayoutPluginInstance, themePluginInstance, bookmarkPluginInstance]}
           // onPageChange={onPageChange}
           // onDocumentLoad={onDocumentLoad}
           // initialPage={initialPage}
