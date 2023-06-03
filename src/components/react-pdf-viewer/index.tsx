@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { RenderPage, RenderPageProps, Viewer, Worker } from "@react-pdf-viewer/core";
+import {
+  RenderPage,
+  RenderPageProps,
+  Viewer,
+  Worker,
+} from "@react-pdf-viewer/core";
 import { themePlugin } from "@react-pdf-viewer/theme";
 import { DarkIcon, LightIcon } from "@react-pdf-viewer/theme";
 import { bookmarkPlugin } from "@react-pdf-viewer/bookmark";
@@ -128,7 +133,7 @@ const ReactPdfViewer = () => {
             userSelect: "none",
           }}
         >
-         Manpreet Singh
+          Manpreet Singh
         </div>
       </div>
       {props.annotationLayer.children}
